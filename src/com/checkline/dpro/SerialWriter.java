@@ -25,7 +25,7 @@ public class SerialWriter implements Runnable {
 	            while ( this.running ) {
 	               this.out.write(array);
 	               this.out.flush();
-	               Thread.sleep(16);
+	               Thread.sleep(100);
 	            }                
 	        }
 	        catch ( IOException | InterruptedException e ) {

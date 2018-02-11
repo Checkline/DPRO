@@ -276,7 +276,6 @@ public class DProUI extends JFrame {
     }   
     
     private void startButtonMouseClicked(java.awt.event.MouseEvent evt) {
-    	System.out.println("HEY CLICKED!");
     	if(this.dPro.isRunning()) {
     		this.dPro.stopRunning();
     	}
