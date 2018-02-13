@@ -3,6 +3,9 @@ package com.checkline.dpro;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -110,6 +113,45 @@ public class DPro {
 	
 	public void addReading(double number) {
 		this.ui.addReading(this.round(number, 1));
+		this.updateStatistics();
+	}
+	
+	public void updateStatistics() {
+		double high = 0.00;
+		double low = 0.00;
+		double avg = 0.00;
+		double stddev = 0.00;
+		ArrayList<Double> readings = this.ui.getReadings();
+		if (!readings.isEmpty()) {
+			high = Collections.max(readings);
+			low = Collections.min(readings);
+			avg = calculateAverage(readings);
+			stddev = calculateStandardDeviation(readings, avg);
+		}
+		
+		this.ui.updateStatistics(high, low, avg, stddev);
+	}
+	
+	private double calculateAverage(List<Double> list) {
+		double sum = 0;
+		if(!list.isEmpty()) {
+			for (Double value : list) {
+				sum += value;
+			}
+			return sum / list.size();
+		}
+		return sum;
+	}
+	
+	private double calculateStandardDeviation(List <Double> list, double average) {
+		List<Double> squared = new ArrayList<Double>();
+		if(!list.isEmpty()) {
+			for (Double value : list) {
+				squared.add(Math.pow(value-average, 2));
+			}
+			return Math.sqrt(this.calculateAverage(squared));
+		}
+		return 0;
 	}
 	
 }

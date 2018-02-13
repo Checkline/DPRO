@@ -2,8 +2,11 @@ package com.checkline.dpro;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
@@ -41,7 +44,8 @@ public class DProUI extends JFrame {
     private JScrollPane readingsScrollPane;
     private JButton setDelayButton;
     private JButton startButton;
-	
+    private DecimalFormat dc;
+    
 	public DProUI(DPro dPro, String version) {
 		super("D-PRO - " + version);
 		this.dPro = dPro;
@@ -51,41 +55,42 @@ public class DProUI extends JFrame {
 	}
 
 	private void initialize() {
-        delayLabel = new javax.swing.JLabel();
-        delaySpinner = new javax.swing.JSpinner();
-        setDelayButton = new javax.swing.JButton();
-        readingsScrollPane = new javax.swing.JScrollPane();
-        readingsList = new javax.swing.JList();
-        hiLabel = new javax.swing.JLabel();
-        loLabel = new javax.swing.JLabel();
-        avgLabel = new javax.swing.JLabel();
-        devLabel = new javax.swing.JLabel();
-        hiText = new javax.swing.JTextField();
-        loText = new javax.swing.JTextField();
-        avgText = new javax.swing.JTextField();
-        devText = new javax.swing.JTextField();
-        exportButton = new javax.swing.JButton();
-        clearButton = new javax.swing.JButton();
-        portButton = new javax.swing.JButton();
-        logScrollPane = new javax.swing.JScrollPane();
-        logText = new javax.swing.JTextArea();
-        startButton = new javax.swing.JButton();
-
+        this.delayLabel = new javax.swing.JLabel();
+        this.delaySpinner = new javax.swing.JSpinner();
+        this.setDelayButton = new javax.swing.JButton();
+        this.readingsScrollPane = new javax.swing.JScrollPane();
+        this.readingsList = new javax.swing.JList();
+        this.hiLabel = new javax.swing.JLabel();
+        this.loLabel = new javax.swing.JLabel();
+        this.avgLabel = new javax.swing.JLabel();
+        this.devLabel = new javax.swing.JLabel();
+        this.hiText = new javax.swing.JTextField();
+        this.loText = new javax.swing.JTextField();
+        this.avgText = new javax.swing.JTextField();
+        this.devText = new javax.swing.JTextField();
+        this.exportButton = new javax.swing.JButton();
+        this.clearButton = new javax.swing.JButton();
+        this.portButton = new javax.swing.JButton();
+        this.logScrollPane = new javax.swing.JScrollPane();
+        this.logText = new javax.swing.JTextArea();
+        this.startButton = new javax.swing.JButton();
+        this.dc = new DecimalFormat("0.00");
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        delayLabel.setText("Delay");
+        this.delayLabel.setText("Delay");
 
-        delaySpinner.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(2.0d), Double.valueOf(0.1d), null, Double.valueOf(0.1d)));
+        this.delaySpinner.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(2.0d), Double.valueOf(0.1d), null, Double.valueOf(0.1d)));
         
-        JFormattedTextField txt = ((JSpinner.NumberEditor) delaySpinner.getEditor()).getTextField();
+        JFormattedTextField txt = ((JSpinner.NumberEditor) this.delaySpinner.getEditor()).getTextField();
         NumberFormatter formatter = (NumberFormatter) txt.getFormatter();
         DecimalFormat decimalFormat = new DecimalFormat("0.0");
         formatter.setFormat(decimalFormat);
         formatter.setAllowsInvalid(false);
         
-        setDelayButton.setText("Set");
-        setDelayButton.addActionListener(new java.awt.event.ActionListener() {
+        this.setDelayButton.setText("Set");
+        this.setDelayButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setDelayButtonActionPerformed(evt);
             }
@@ -93,68 +98,73 @@ public class DProUI extends JFrame {
         
         this.readingsList.setModel(new DefaultListModel<Double>());
         
-        readingsScrollPane.setViewportView(readingsList);
+        this.readingsScrollPane.setViewportView(readingsList);
 
-        hiLabel.setText("HI");
+        this.hiLabel.setText("MAX");
 
-        loLabel.setText("LO");
+        this.loLabel.setText("MIN");
 
-        avgLabel.setText("AVG");
+        this.avgLabel.setText("\u03BC");
 
-        devLabel.setText("DEV");
+        this.devLabel.setText("\u03C3");
 
-        hiText.setEditable(false);
-        hiText.addActionListener(new java.awt.event.ActionListener() {
+        this.hiText.setEditable(false);
+        this.hiText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hiTextActionPerformed(evt);
             }
         });
 
-        loText.setEditable(false);
-        loText.addActionListener(new java.awt.event.ActionListener() {
+        this.loText.setEditable(false);
+        this.loText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loTextActionPerformed(evt);
             }
         });
 
-        avgText.setEditable(false);
-        avgText.addActionListener(new java.awt.event.ActionListener() {
+        this.avgText.setEditable(false);
+        this.avgText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 avgTextActionPerformed(evt);
             }
         });
 
-        devText.setEditable(false);
-        devText.addActionListener(new java.awt.event.ActionListener() {
+        this.devText.setEditable(false);
+        this.devText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 devTextActionPerformed(evt);
             }
         });
 
-        exportButton.setText("Export");
-        exportButton.addActionListener(new java.awt.event.ActionListener() {
+        this.exportButton.setText("Export");
+        this.exportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportButtonActionPerformed(evt);
             }
         });
 
-        clearButton.setText("Clear");
-
-        portButton.setText("Choose Port");
-        portButton.addActionListener(new java.awt.event.ActionListener() {
+        this.clearButton.setText("Clear");
+        this.clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+        
+        this.portButton.setText("Choose Port");
+        this.portButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 portButtonActionPerformed(evt);
             }
         });
         
-        logText.setEditable(false);
-        logText.setColumns(20);
-        logText.setRows(5);
+        this.logText.setEditable(false);
+        this.logText.setColumns(20);
+        this.logText.setRows(5);
         ((DefaultCaret)this.logText.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        logScrollPane.setViewportView(logText);
+        this.logScrollPane.setViewportView(logText);
         
-        startButton.setText("Start");
-        startButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        this.startButton.setText("Start");
+        this.startButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 startButtonMouseClicked(evt);
             }
@@ -186,10 +196,10 @@ public class DProUI extends JFrame {
                                     .addComponent(hiLabel))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(devText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(avgText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(loText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(hiText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(devText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(avgText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(loText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(hiText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(setDelayButton)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,7 +257,13 @@ public class DProUI extends JFrame {
         pack();
 	}
 
-    private void setDelayButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+    protected void clearButtonActionPerformed(ActionEvent evt) {
+    	((DefaultListModel<Double>) this.readingsList.getModel()).removeAllElements();
+		this.logText.setText("");
+		this.updateStatistics(0, 0, 0, 0);
+	}
+
+	private void setDelayButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
     	this.dPro.setDelay((double) this.delaySpinner.getValue());
     }                                              
 
@@ -287,7 +303,15 @@ public class DProUI extends JFrame {
     public void addReading(double reading) {
     	((DefaultListModel<Double>)this.readingsList.getModel()).insertElementAt(reading,0);
     }
-
+    
+    public ArrayList<Double> getReadings() {
+    	ArrayList<Double> ret = new ArrayList<Double>();
+		for (int i = 0; i < this.readingsList.getModel().getSize(); i++) {
+			ret.add((double) this.readingsList.getModel().getElementAt(i));
+		}
+		return ret;
+    }
+    
 	public JButton getStartButton() {
 		return this.startButton;
 	}
@@ -302,6 +326,13 @@ public class DProUI extends JFrame {
 
 	public JTextArea getLogArea() {
 		return this.logText;
+	}
+	
+	public void updateStatistics(double high, double low, double avg, double stddev) {
+		this.hiText.setText(this.dc.format(high));
+		this.loText.setText(this.dc.format(low));
+		this.avgText.setText(this.dc.format(avg));
+		this.devText.setText(this.dc.format(stddev));
 	}
 	
 }

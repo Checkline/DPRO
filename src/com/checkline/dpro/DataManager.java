@@ -48,7 +48,7 @@ public class DataManager implements Runnable {
 				if (m.find()) {
 					now = System.nanoTime();
 					System.out.println(out + "+ " + ((now - this.threadStartTime) / 1000000000.0));
-					number = Double.parseDouble(out.substring(0,out.indexOf(",")));
+					number = Double.parseDouble(out.substring(0,out.indexOf(",")).replaceAll("\\s",""));
 					if (number > this.threshold && this.countDown == false && this.readingReset == true) {
 						//gauge is starting to send data above threshold, mark the start time and flag the countDown and reset
 						this.countDown = true;
