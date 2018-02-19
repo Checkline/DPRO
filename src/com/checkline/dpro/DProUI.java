@@ -3,6 +3,7 @@ package com.checkline.dpro;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -164,11 +165,12 @@ public class DProUI extends JFrame {
         this.logScrollPane.setViewportView(logText);
         
         this.startButton.setText("Start");
-        this.startButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                startButtonMouseClicked(evt);
-            }
-        });
+        this.startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+                startButtonMouseClicked(e);
+				
+			}
+		});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -258,9 +260,7 @@ public class DProUI extends JFrame {
 	}
 
     protected void clearButtonActionPerformed(ActionEvent evt) {
-    	((DefaultListModel<Double>) this.readingsList.getModel()).removeAllElements();
-		this.logText.setText("");
-		this.updateStatistics(0, 0, 0, 0);
+    	this.dPro.clear();
 	}
 
 	private void setDelayButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
@@ -284,14 +284,14 @@ public class DProUI extends JFrame {
     }                                       
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // TODO add your handling code here:
+        this.dPro.exportReadings();
     }       
     
     private void portButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
     	this.dPro.portSettings();
     }   
     
-    private void startButtonMouseClicked(java.awt.event.MouseEvent evt) {
+    private void startButtonMouseClicked(ActionEvent e) {
     	if(this.dPro.isRunning()) {
     		this.dPro.stopRunning();
     	}

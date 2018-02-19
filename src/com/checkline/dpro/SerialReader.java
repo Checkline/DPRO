@@ -30,7 +30,6 @@ public class SerialReader implements Runnable {
 	            while (this.running && ( len = this.in.read(buffer)) > -1 ) {
 	            	line = new String(buffer,0,len);
 	            	this.bq.put(line);
-	            	//System.out.println(line);
 	            }
 	        }
 	        catch ( IOException | InterruptedException e ) {
