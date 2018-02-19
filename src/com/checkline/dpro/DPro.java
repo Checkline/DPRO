@@ -138,6 +138,8 @@ public class DPro {
 	}
 	
 	public void portSettings() {
+		this.port.populate();
+		this.port.pack();
 		this.port.setVisible(true);
 	}
 	
