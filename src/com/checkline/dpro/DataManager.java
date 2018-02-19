@@ -69,6 +69,7 @@ public class DataManager implements Runnable {
 						currentReading.finalize(now);
 						this.dPro.addReading(currentReading);
 						System.out.println("Reading Ended");
+						this.dPro.logMessage("Reading Ended.");
 						this.countDown = false;
 						this.startTime = 0;
 					}

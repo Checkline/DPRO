@@ -24,14 +24,13 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class PortChooser extends JDialog implements ItemListener {
 	  /** A mapping from names to CommPortIdentifiers. */
-	  @SuppressWarnings({ "unchecked" })
-	  protected HashMap map = new HashMap();
+	  protected HashMap<String, CommPortIdentifier> map = new HashMap<String, CommPortIdentifier>();
 	  /** The name of the choice the user made. */
 	  protected String selectedPortName;
 	  /** The CommPortIdentifier the user chose. */
 	  protected CommPortIdentifier selectedPortIdentifier;
 	  /** The JComboBox for serial ports */
-	  protected JComboBox serialPortsChoice;
+	  protected JComboBox<String> serialPortsChoice;
 	  /** The SerialPort object */
 	  protected SerialPort ttya;
 	  /** To display the chosen */
@@ -45,9 +44,9 @@ public class PortChooser extends JDialog implements ItemListener {
 	   */
 	  public void itemStateChanged(ItemEvent e) {
 	    // Get the name
-	    selectedPortName = (String)((JComboBox)e.getSource()).getSelectedItem();
+	    selectedPortName = (String)((JComboBox<?>)e.getSource()).getSelectedItem();
 	    // Get the given CommPortIdentifier
-	    selectedPortIdentifier = (CommPortIdentifier)map.get(selectedPortName);
+	    selectedPortIdentifier = map.get(selectedPortName);
 	    // Display the name.
 	    choice.setText(selectedPortName);
 	    dPro.getSerialManager().updatePort(selectedPortName, selectedPortIdentifier);
@@ -85,7 +84,7 @@ public class PortChooser extends JDialog implements ItemListener {
 	    centerPanel.setLayout(new GridLayout(0,2, PAD, PAD));
 
 	    centerPanel.add(new JLabel("Serial Ports", JLabel.RIGHT));
-	    serialPortsChoice = new JComboBox();
+	    serialPortsChoice = new JComboBox<String>();
 	    centerPanel.add(serialPortsChoice);
 	    serialPortsChoice.setEnabled(false);
 
@@ -102,16 +101,17 @@ public class PortChooser extends JDialog implements ItemListener {
 
 	  }
 
-	  /** Populate the ComboBoxes by asking the Java Communications API
-	   * what ports it has.  Since the initial information comes from
-	   * a Properties file, it may not exactly reflect your hardware.
-	   */
-	  @SuppressWarnings({ "unchecked" })
+  /** Populate the ComboBoxes by asking the Java Communications API
+   * what ports it has.  Since the initial information comes from
+   * a Properties file, it may not exactly reflect your hardware.
+   */
 	protected void populate() {
 	    // get list of ports available on this particular computer,
 	    // by calling static method in CommPortIdentifier.
-	    Enumeration pList = CommPortIdentifier.getPortIdentifiers();
-
+	    Enumeration<?> pList = CommPortIdentifier.getPortIdentifiers();
+	    
+	    serialPortsChoice.removeAllItems();
+	    
 	    // Process the list, putting serial and parallel into ComboBoxes
 	    while (pList.hasMoreElements()) {
 	      CommPortIdentifier cpi = (CommPortIdentifier)pList.nextElement();

@@ -5,26 +5,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+
+import gnu.io.PortInUseException;
 
 public class DPro {
 	
@@ -66,7 +63,6 @@ public class DPro {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ReadingSet test = new ReadingSet(28637558142101d);
@@ -87,6 +83,15 @@ public class DPro {
 		test.finalize(28639580997926d);
 		this.addReading(test);
 		
+		test = new ReadingSet(28637558142101d);
+		test.addReading(new Reading(62, 28637558124217d));
+		test.addReading(new Reading(71.1, 28637855873841d));
+		test.addReading(new Reading(79.9, 28638054417705d));
+		test.addReading(new Reading(76.3, 28638353700776d));
+		test.addReading(new Reading(74.2, 28639580997926d));
+		test.finalize(28639580997926d);
+		this.addReading(test);
+		
 	}
 
 	public void setDelay(double d) {
@@ -100,7 +105,11 @@ public class DPro {
 			this.logMessage("Delay has been changed to " + this.delay);
 		}
 	}
-
+	
+	public double getDelay() {
+		return this.delay;
+	}
+	
 	public void startRunning() {
 		if (this.serialManager.hasChosenPort()) {
 			this.running = true;
@@ -110,7 +119,12 @@ public class DPro {
 				this.dataManager.startThread();
 				this.dmThread.start();
 				this.serialManager.startRunning();
-			} catch (Exception e) {
+			} catch (PortInUseException e) {
+				this.logMessage("Error: Port already in use.");
+				this.stopRunning();
+				e.printStackTrace();
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 			System.out.println("Running");
@@ -121,22 +135,24 @@ public class DPro {
 	}
 
 	public void stopRunning() {
-		this.running = false;
-		this.ui.getStartButton().setText("Start");
-		try {
-			this.serialManager.stopRunning();
-			this.dataManager.stopThread();
-			this.dmThread.join();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (this.isRunning()) {
+			this.running = false;
+			this.ui.getStartButton().setText("Start");
+			try {
+				this.serialManager.stopRunning();
+				this.dataManager.stopThread();
+				this.dmThread.join();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println("Stopped");
 		}
-		System.out.println("Stopped");
 	}
 	
 	public boolean isRunning() {
 		return this.running;
 	}
-	
+
 	public void portSettings() {
 		this.port.populate();
 		this.port.pack();
@@ -166,10 +182,11 @@ public class DPro {
 	}
 
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		this.readings.clear();
+		this.clearStatistics();
+		this.ui.clear();
 	}	
-	
+
 	public void addReading(ReadingSet reading) {
 		this.readings.add(reading);
 		this.ui.addReading(this.round(reading.getFinalValue(), 1));
@@ -206,6 +223,13 @@ public class DPro {
 	
 	public void updateStatistics() {
 		this.ui.updateStatistics(this.high, this.low, this.avg, this.stddev);
+	}
+	
+	private void clearStatistics() {
+		this.high = 0;
+		this.low = 0;
+		this.avg = 0;
+		this.stddev = 0;
 	}
 	
 	public void calculateStatistics() {
@@ -280,7 +304,5 @@ public class DPro {
 	public void setStddev(double stddev) {
 		this.stddev = stddev;
 	}
-
-
 	
 }
