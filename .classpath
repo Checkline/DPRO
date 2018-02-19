@@ -9,6 +9,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="DPRO/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="E:/Documents/Java/DPRO/lib/poi/poi-3.17.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
