@@ -64,34 +64,7 @@ public class DPro {
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
-		}
-		ReadingSet test = new ReadingSet(28637558142101d);
-		test.addReading(new Reading(40, 28637558124217d));
-		test.addReading(new Reading(68.3, 28637855873841d));
-		test.addReading(new Reading(71.5, 28638054417705d));
-		test.addReading(new Reading(70.7, 28638353700776d));
-		test.addReading(new Reading(70.5, 28639580997926d));
-		test.finalize(28639580997926d);
-		this.addReading(test);
-		
-		test = new ReadingSet(28637558142101d);
-		test.addReading(new Reading(61, 28637558124217d));
-		test.addReading(new Reading(72.4, 28637855873841d));
-		test.addReading(new Reading(78.1, 28638054417705d));
-		test.addReading(new Reading(74.7, 28638353700776d));
-		test.addReading(new Reading(73.5, 28639580997926d));
-		test.finalize(28639580997926d);
-		this.addReading(test);
-		
-		test = new ReadingSet(28637558142101d);
-		test.addReading(new Reading(62, 28637558124217d));
-		test.addReading(new Reading(71.1, 28637855873841d));
-		test.addReading(new Reading(79.9, 28638054417705d));
-		test.addReading(new Reading(76.3, 28638353700776d));
-		test.addReading(new Reading(74.2, 28639580997926d));
-		test.finalize(28639580997926d);
-		this.addReading(test);
-		
+		}		
 	}
 
 	public void setDelay(double d) {

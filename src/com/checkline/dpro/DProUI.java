@@ -37,7 +37,7 @@ public class DProUI extends JFrame {
     
     
 	public DProUI(DPro dPro, String version) {
-		super("D-PRO - " + version);
+		super("DPRO - " + version);
 		this.dPro = dPro;
 		this.initialize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
